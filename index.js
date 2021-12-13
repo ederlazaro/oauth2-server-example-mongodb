@@ -1,10 +1,11 @@
-const express = require('express');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const bluebird = require('bluebird');
-const authRoutes = require('./routes');
-const database = require('./database');
+const express = require("express");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const bluebird = require("bluebird");
+const authRoutes = require("./routes");
+const database = require("./database");
+const path = require("path");
 
 global.Promise = bluebird;
 
@@ -12,7 +13,10 @@ database.connect();
 
 const app = express();
 
-app.use(logger('dev'));
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "views"));
+
+app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -20,7 +24,7 @@ app.use(cookieParser());
 authRoutes(app);
 
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -29,9 +33,10 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
     message: err.message,
-    error: err
+    error: err,
   });
 });
 
-
-app.listen(8000, err => (err ? console.log('Error happened', err) : console.log('Server is up')));
+app.listen(9000, (err) =>
+  err ? console.log("Error happened", err) : console.log("Server is up")
+);

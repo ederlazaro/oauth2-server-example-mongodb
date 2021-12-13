@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -7,14 +7,19 @@ const OAuthClientSchema = new Schema({
   clientId: String,
   clientSecret: String,
   redirectUris: {
-    type: [String]
+    type: [String],
   },
   grants: {
     type: [String],
-    default: ['authorization_code', 'password', 'refresh_token', 'client_credentials']
+    default: [
+      "authorization_code",
+      "password",
+      "refresh_token",
+      "client_credentials",
+    ],
   },
   scope: String,
-  user: { type: Schema.Types.ObjectId, ref: 'User' }
+  user: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
-module.exports = mongoose.model('OAuthClient', OAuthClientSchema);
+module.exports = mongoose.model("OAuthClient", OAuthClientSchema);
